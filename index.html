@@ -45,14 +45,15 @@
     }
     .heart {
       position: absolute;
+      top: -10%;
       font-size: 20px;
       opacity: 0.35;
-      animation: fall linear infinite;
+      animation: fall linear forwards;
       font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
     }
     @keyframes fall {
-      0% { transform: translateY(-10%); }
-      100% { transform: translateY(110vh); }
+      0% { transform: translateY(0); }
+      100% { transform: translateY(120vh); }
     }
 
     /* Content */
@@ -391,7 +392,12 @@
         el.style.animationDelay = '0s';
 
         heartsEl.appendChild(el);
-        setTimeout(() => el.remove(), 20000);
+        // удаляем сердечко только после завершения анимации падения в самый низ
+        el.addEventListener('animationend', () => {
+          if (el.parentNode) {
+            el.parentNode.removeChild(el);
+          }
+        });
       }
 
       for (let i = 0; i < 8; i++) setTimeout(createHeart, i * 250);
