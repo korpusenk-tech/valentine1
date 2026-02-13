@@ -47,9 +47,12 @@
       position: absolute;
       font-size: 20px;
       opacity: 0.35;
+      animation: fall linear infinite;
       font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
-      transform: translate(-50%, -50%);
-      will-change: transform, top, left;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-10%); }
+      100% { transform: translateY(110vh); }
     }
 
     /* Content */
@@ -368,7 +371,6 @@
       // Только розовые сердечки, без других цветов
       const heartChars = ['💖', '💕', '💗', '💓', '💝', '💞'];
       const heartColumns = 12;
-      const hearts = [];
       let heartColumnIndex = 0;
 
       function createHeart() {
@@ -379,62 +381,21 @@
         const columnWidth = 100 / heartColumns;
         const base = (heartColumnIndex + 0.5) * columnWidth;
         const jitter = (Math.random() - 0.5) * columnWidth * 0.3;
-        let x = Math.min(98, Math.max(2, base + jitter));
+        const x = Math.min(98, Math.max(2, base + jitter));
         heartColumnIndex = (heartColumnIndex + 1) % heartColumns;
 
         const size = 14 + Math.random() * 12;
-        const vy = 0.15 + Math.random() * 0.1; // скорость падения
-        const yStart = -5 - Math.random() * 10; // старт чуть выше экрана
-
-        const heart = { el, x, y: yStart, vy, size };
         el.style.fontSize = size + 'px';
-        hearts.push(heart);
+        el.style.left = x + '%';
+        el.style.animationDuration = (8 + Math.random() * 8) + 's';
+        el.style.animationDelay = '0s';
+
         heartsEl.appendChild(el);
+        setTimeout(() => el.remove(), 20000);
       }
 
-      function updateHearts() {
-        // простое "отталкивание": раздвигаем пересекающиеся сердечки по горизонтали
-        const len = hearts.length;
-        for (let i = 0; i < len; i++) {
-          const h1 = hearts[i];
-          for (let j = i + 1; j < len; j++) {
-            const h2 = hearts[j];
-            const dx = h2.x - h1.x;
-            const dy = h2.y - h1.y;
-            const maxYDist = (h1.size + h2.size) * 0.8;
-            const minXDist = (h1.size + h2.size) * 0.5;
-
-            if (Math.abs(dy) < maxYDist && Math.abs(dx) < minXDist) {
-              const dir = dx >= 0 ? 1 : -1;
-              const overlap = (minXDist - Math.abs(dx)) / 2;
-              h1.x -= dir * overlap;
-              h2.x += dir * overlap;
-            }
-          }
-        }
-
-        // обновляем позицию и удаляем вышедшие за нижнюю границу
-        for (let i = hearts.length - 1; i >= 0; i--) {
-          const h = hearts[i];
-          h.y += h.vy;
-
-          if (h.y > 110) {
-            heartsEl.removeChild(h.el);
-            hearts.splice(i, 1);
-            continue;
-          }
-
-          h.el.style.left = h.x + '%';
-          h.el.style.top = h.y + 'vh';
-        }
-
-        requestAnimationFrame(updateHearts);
-      }
-
-      // стартуем несколько сердечек и анимацию
       for (let i = 0; i < 8; i++) setTimeout(createHeart, i * 250);
       setInterval(createHeart, 1400);
-      requestAnimationFrame(updateHearts);
     })();
   </script>
 </body>
