@@ -46,7 +46,7 @@
     .heart {
       position: absolute;
       font-size: 28px;
-      opacity: 0.7;
+      opacity: 0.35;
       animation: fall linear infinite;
       font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
     }
@@ -310,7 +310,7 @@
         // Гифка на шаге "Хочешь открыть?" — вставь ссылку на гифку
         gif1Url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExamRlMWplaTExZTU1NTdiMWlibnlueGtubjN0NWk4Z3phMTJmM2hveiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kZqbBT64ECtjy/giphy.gif',
         // Гифка на шаге "С Днём Святого Валентина" — вставь ссылку на гифку
-        gif2Url: 'https://vgif.ru/gifs/156/vgif-ru-28025.gif',
+        gif2Url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3QyNzEweGl5a2xmd3BsZ2Z0NHo0cHVrZWg2MG83bWJxZ3BuOXN2aSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif',
         // Гифка на шаге "Ну пожалуйста... давай еще раз?" — вставь ссылку на гифку
         gif3Url: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExOG1keTRqZHpkeWo5YXNjZmFqOG5neHlrZG9jMHRvbHVpdTFtaWx5ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/y93x7gLXTO5dnSWCEI/giphy.gif',
         // Текст пожеланий в конце (перенос строки — через \n)
@@ -380,8 +380,8 @@
         heartsEl.appendChild(el);
         setTimeout(() => el.remove(), 20000);
       }
-      for (let i = 0; i < 15; i++) setTimeout(createHeart, i * 200);
-      setInterval(createHeart, 800);
+      for (let i = 0; i < 8; i++) setTimeout(createHeart, i * 250);
+      setInterval(createHeart, 1400);
     })();
   </script>
 </body>
