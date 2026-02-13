@@ -45,7 +45,7 @@
     }
     .heart {
       position: absolute;
-      font-size: 28px;
+      font-size: 20px;
       opacity: 0.35;
       animation: fall linear infinite;
       font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
@@ -369,14 +369,21 @@
 
       // Falling hearts - розовые эмодзи сердечки Apple (iPhone стиль)
       const heartChars = ['💖', '💕', '💗', '💓', '💝', '💞', '❤️', '💜'];
+      const heartColumns = 10;
+      let heartColumnIndex = 0;
+
       function createHeart() {
         const el = document.createElement('span');
         el.className = 'heart';
         el.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
-        el.style.left = Math.random() * 100 + '%';
+        // равномернее распределяем сердечки по ширине экрана
+        const base = (heartColumnIndex + 0.5) * (100 / heartColumns);
+        const jitter = (Math.random() - 0.5) * (100 / heartColumns) * 0.6;
+        el.style.left = Math.min(98, Math.max(2, base + jitter)) + '%';
+        heartColumnIndex = (heartColumnIndex + 1) % heartColumns;
         el.style.animationDuration = (8 + Math.random() * 8) + 's';
         el.style.animationDelay = '0s';
-        el.style.fontSize = (20 + Math.random() * 24) + 'px';
+        el.style.fontSize = (14 + Math.random() * 12) + 'px';
         heartsEl.appendChild(el);
         setTimeout(() => el.remove(), 20000);
       }
