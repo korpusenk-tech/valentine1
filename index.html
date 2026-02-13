@@ -368,8 +368,9 @@
       document.getElementById('btnNext3').addEventListener('click', function () { showStep('step4'); });
 
       // Falling hearts - розовые эмодзи сердечки Apple (iPhone стиль)
-      const heartChars = ['💖', '💕', '💗', '💓', '💝', '💞', '❤️', '💜'];
-      const heartColumns = 10;
+      // Только розовые сердечки, без других цветов
+      const heartChars = ['💖', '💕', '💗', '💓', '💝', '💞'];
+      const heartColumns = 12;
       let heartColumnIndex = 0;
 
       function createHeart() {
@@ -377,8 +378,10 @@
         el.className = 'heart';
         el.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
         // равномернее распределяем сердечки по ширине экрана
-        const base = (heartColumnIndex + 0.5) * (100 / heartColumns);
-        const jitter = (Math.random() - 0.5) * (100 / heartColumns) * 0.6;
+        const columnWidth = 100 / heartColumns;
+        const base = (heartColumnIndex + 0.5) * columnWidth;
+        // небольшой разброс, чтобы сердечки не "входили" друг в друга
+        const jitter = (Math.random() - 0.5) * columnWidth * 0.3;
         el.style.left = Math.min(98, Math.max(2, base + jitter)) + '%';
         heartColumnIndex = (heartColumnIndex + 1) % heartColumns;
         el.style.animationDuration = (8 + Math.random() * 8) + 's';
