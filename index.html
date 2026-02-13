@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>С Днём Святого Валентина</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow-x: hidden; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Poppins', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #333;
+      min-height: 100vh;
+      position: relative;
+      font-weight: 600;
+    }
+
+    /* Video background + overlay */
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: #fff;
+    }
+    .video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .video-bg .placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #fff5f7 0%, #ffe4ec 100%);
+    }
+
+    /* Falling hearts */
+    .hearts {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .heart {
+      position: absolute;
+      font-size: 28px;
+      opacity: 0.7;
+      animation: fall linear infinite;
+      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-10%) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(360deg); }
+    }
+
+    /* Content */
+    .content {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .step {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      max-width: 500px;
+      width: 100%;
+      animation: fadeIn 0.4s ease;
+    }
+    .step.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Envelope */
+    .envelope-wrap {
+      position: relative;
+      cursor: pointer;
+    }
+    .envelope {
+      width: 200px;
+      height: 145px;
+      background: linear-gradient(145deg, #e8a0b5, #d4768f);
+      border-radius: 4px;
+      box-shadow: 0 8px 24px rgba(199, 123, 138, 0.4);
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+    }
+    .envelope::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(145deg, #f0b0c4, #e090a8);
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+      transform-origin: top center;
+      transition: transform 0.4s ease;
+    }
+    .envelope-wrap:hover .envelope::before { transform: rotateX(-120deg); }
+    .envelope-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+      z-index: 1;
+      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+      pointer-events: none;
+    }
+
+    .text-title {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Poppins', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 1.75rem;
+      color: #8b4a5a;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+    .text-big {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Poppins', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 2rem;
+      color: #8b4a5a;
+      font-weight: 700;
+      line-height: 1.6;
+      padding: 8px 0;
+      overflow: visible;
+      word-break: keep-all;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 24px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Poppins', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    .btn:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+    .btn-pink {
+      background: linear-gradient(145deg, #e8a0b5, #d4768f);
+      color: #fff;
+    }
+    .btn-pink:hover { background: linear-gradient(145deg, #e090a8, #c76a82); }
+    .btn-ghost {
+      background: rgba(255,255,255,0.8);
+      color: #8b4a5a;
+      border: 2px solid #d4768f;
+    }
+
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+    /* GIF blocks */
+    .gif-block {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      background: #fff;
+      position: relative;
+    }
+    .gif-block.large {
+      max-width: 500px;
+    }
+    .gif-block img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .gif-block .gif-placeholder {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #ffe4ec, #fff0f4);
+    }
+
+    .wishes-line {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Poppins', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 1.2rem;
+      color: #8b4a5a;
+      line-height: 1.6;
+      max-width: 400px;
+      white-space: pre-line;
+      font-weight: 500;
+    }
+    .wishes-box {
+      background: #fff;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      max-width: 420px;
+      width: 100%;
+      margin-top: 16px;
+    }
+    .hearts-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 12px;
+      font-size: 1.8rem;
+      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+    }
+    .author-credit {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Poppins', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 0.85rem;
+      color: rgba(139, 74, 90, 0.5);
+      z-index: 10;
+      pointer-events: none;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-bg">
+    <video id="bgVideo" autoplay muted loop playsinline></video>
+    <div class="placeholder" id="videoPlaceholder"></div>
+  </div>
+
+  <div class="hearts" id="hearts"></div>
+
+  <main class="content">
+    <!-- Step 1: Письмо -->
+    <section class="step active" id="step1">
+      <div class="envelope-wrap">
+        <div class="envelope">
+          <span class="envelope-icon">💌</span>
+        </div>
+      </div>
+      <p class="text-title">У меня для тебя письмо...</p>
+      <button type="button" class="btn btn-pink" id="btnNext1">Далее →</button>
+    </section>
+
+    <!-- Step 2: Хочешь открыть? + GIF + Открыть / Не-а -->
+    <section class="step" id="step2">
+      <p class="text-big">Хочешь открыть? (´｡• ω •｡`)</p>
+      <div class="gif-block" data-gif="gif1">
+        <img id="gif1Img" src="" alt="" style="display:none">
+        <div class="gif-placeholder" id="gif1Placeholder" style="display:none"></div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-pink" id="btnOpen">Открыть</button>
+        <button type="button" class="btn btn-ghost" id="btnNo">Не-а</button>
+      </div>
+    </section>
+
+    <!-- Step 2b: Ну пожалуйста -->
+    <section class="step" id="step2b">
+      <p class="text-big">Ну пожалуйста...<br>Давай еще раз? :-<</p>
+      <div class="gif-block" data-gif="gif3">
+        <img id="gif3Img" src="" alt="" style="display:none">
+        <div class="gif-placeholder" id="gif3Placeholder" style="display:none"></div>
+      </div>
+      <button type="button" class="btn btn-pink" id="btnAgain">Еще раз?</button>
+    </section>
+
+    <!-- Step 3: С Днём Святого Валентина + гифка + кнопка -->
+    <section class="step" id="step3">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <span style="font-size: 2.5rem; font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;">❤️</span>
+        <p class="text-big">С Днём Святого<br>Валентина!</p>
+      </div>
+      <div class="gif-block large" data-gif="gif2">
+        <img id="gif2Img" src="" alt="" style="display:none">
+        <div class="gif-placeholder" id="gif2Placeholder" style="display:none"></div>
+      </div>
+      <p class="text-title">Нажми на конпку!! (*¯︶¯*)</p>
+      <button type="button" class="btn btn-pink" id="btnNext3">Далее!! (´• ω •`)</button>
+    </section>
+
+    <!-- Step 4: Любимая + пожелания -->
+    <section class="step" id="step4">
+      <p class="text-big">❤ С Днём Святого Валентина Любимая! ❤❤❤</p>
+      <div class="hearts-row">❤️❤️❤️</div>
+      <div class="wishes-box">
+        <p class="wishes-line" id="wishesText"></p>
+      </div>
+    </section>
+  </main>
+
+  <div class="author-credit">for koshelyan</div>
+
+  <script>
+    (function () {
+      // ========== НАСТРОЙКИ: меняй только здесь ==========
+      const CONFIG = {
+        // Ссылка на видео для фона (оставь '' для белого/розового градиента без видео)
+        backgroundVideoUrl: '',
+        // Гифка на шаге "Хочешь открыть?" — вставь ссылку на гифку
+        gif1Url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExamRlMWplaTExZTU1NTdiMWlibnlueGtubjN0NWk4Z3phMTJmM2hveiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kZqbBT64ECtjy/giphy.gif',
+        // Гифка на шаге "С Днём Святого Валентина" — вставь ссылку на гифку
+        gif2Url: 'https://vgif.ru/gifs/156/vgif-ru-28025.gif',
+        // Гифка на шаге "Ну пожалуйста... давай еще раз?" — вставь ссылку на гифку
+        gif3Url: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExOG1keTRqZHpkeWo5YXNjZmFqOG5neHlrZG9jMHRvbHVpdTFtaWx5ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/y93x7gLXTO5dnSWCEI/giphy.gif',
+        // Текст пожеланий в конце (перенос строки — через \n)
+        wishes: 'Ты самое лучшее что со мной случалось в этом мире! Спасибо, что ты есть. С днём Святого Валентина! 💗'
+      };
+      // ==================================================
+
+      const bgVideo = document.getElementById('bgVideo');
+      const videoPlaceholder = document.getElementById('videoPlaceholder');
+      const steps = document.querySelectorAll('.step');
+      const heartsEl = document.getElementById('hearts');
+
+      function showStep(id) {
+        steps.forEach(s => {
+          s.classList.toggle('active', s.id === id);
+        });
+      }
+
+      // Video
+      if (CONFIG.backgroundVideoUrl) {
+        bgVideo.src = CONFIG.backgroundVideoUrl;
+        bgVideo.style.display = 'block';
+        videoPlaceholder.style.display = 'none';
+        bgVideo.play().catch(function () {});
+      } else {
+        bgVideo.style.display = 'none';
+        videoPlaceholder.style.display = 'block';
+      }
+
+      // GIFs
+      function applyGif(url, imgId, placeholderId, blockEl) {
+        var img = document.getElementById(imgId);
+        var placeholder = document.getElementById(placeholderId);
+        if (url) {
+          blockEl.style.display = '';
+          img.src = url;
+          img.style.display = 'block';
+          placeholder.style.display = 'none';
+        } else {
+          blockEl.style.display = 'none';
+        }
+      }
+      applyGif(CONFIG.gif1Url, 'gif1Img', 'gif1Placeholder', document.querySelector('[data-gif="gif1"]'));
+      applyGif(CONFIG.gif2Url, 'gif2Img', 'gif2Placeholder', document.querySelector('[data-gif="gif2"]'));
+      applyGif(CONFIG.gif3Url, 'gif3Img', 'gif3Placeholder', document.querySelector('[data-gif="gif3"]'));
+
+      // Wishes
+      document.getElementById('wishesText').textContent = CONFIG.wishes.replace(/\\n/g, '\n');
+
+      // Buttons flow
+      document.getElementById('btnNext1').addEventListener('click', function () { showStep('step2'); });
+      document.getElementById('btnOpen').addEventListener('click', function () { showStep('step3'); });
+      document.getElementById('btnNo').addEventListener('click', function () { showStep('step2b'); });
+      document.getElementById('btnAgain').addEventListener('click', function () { showStep('step2'); });
+      document.getElementById('btnNext3').addEventListener('click', function () { showStep('step4'); });
+
+      // Falling hearts - розовые эмодзи сердечки Apple (iPhone стиль)
+      const heartChars = ['💖', '💕', '💗', '💓', '💝', '💞', '❤️', '💜'];
+      function createHeart() {
+        const el = document.createElement('span');
+        el.className = 'heart';
+        el.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
+        el.style.left = Math.random() * 100 + '%';
+        el.style.animationDuration = (8 + Math.random() * 8) + 's';
+        el.style.animationDelay = '0s';
+        el.style.fontSize = (20 + Math.random() * 24) + 'px';
+        heartsEl.appendChild(el);
+        setTimeout(() => el.remove(), 20000);
+      }
+      for (let i = 0; i < 15; i++) setTimeout(createHeart, i * 200);
+      setInterval(createHeart, 800);
+    })();
+  </script>
+</body>
+</html>
